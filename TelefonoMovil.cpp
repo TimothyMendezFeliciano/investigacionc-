@@ -1,3 +1,4 @@
+
 #include <string>
 #include <iostream>
 
@@ -9,11 +10,14 @@ class TelefonoMovil
 public:
     //Constructores
     TelefonoMovil();
+
     TelefonoMovil(string ma, string mo, string p, string i);
-    TelefonoMovil(string ma, string mo, double p, int i);
+    TelefonoMovil(string ma, string mo, double p, int i); // <- Este es el de las instrucciones 
+
     // Getters y Setters
     string getMarca();
     void setMarca(string ma);
+
     string getModelo();
     void setModelo(string mo);
     double getPrecio();
@@ -95,13 +99,12 @@ void TelefonoMovil::setInventario(int i)
     this->inventario = i;
 }
 
-// For some weird reason this has bugs
-    // Marca and Modelo seem to not mix well
-    // Must ask professor
-// string TelefonoMovil::getAttributes() {
-//     string p = to_string(getPrecio()); // precio
-//     string i = to_string(getInventario()); // inventario
-//     string attributes = getMarca() + getModelo() + p + i;
+string TelefonoMovil::getAttributes() 
+{
+	string temp;
+	temp = marca + "\n" + modelo + "\n" + to_string(precio) + "\n"  + to_string(inventario);
+	  
+	return temp;
 
-//      return attributes;
-// }
+}
+

@@ -10,10 +10,11 @@ bool rangoCorrecto(int valor) {
 }
 
 // Function used to represent the Menu Section of the program
-    // Returns users choice
-int menuSelection(int& option) {
+// Returns users choice
+int menuSelection(int& option)
+{
 
-    cout << "Enter a number from the menu" << endl;
+    
     cout << "1. Cargar datos de archivo\n"
          << "2. Almacenar datos en archivo\n"
          << "3. Valor de inventario\n"
@@ -24,37 +25,40 @@ int menuSelection(int& option) {
          << "8. Mostrar inventario en orden alfabetico marca modelo\n"
          << "0. Salir\n"
          << endl;
+	cout << "Escoja una opción ";
 
     do {
         cin >> option;
 
         if (!rangoCorrecto(option)) {
-            cout << "Number option must be between 0 and 8" << endl;
+            cout << "La opción debe ser un numero entero entre 0 y 8" << endl;
         }
 
     } while (!rangoCorrecto(option));
-    return option;
+    return option; //------------- Need to understand why we return option?
 }
 
 // Reads file, extracts data for variables, then creates a new phone and adds it to the array
-void opcion1(string& fileName, ifstream& input, int& index, TelefonoMovil telefono[], bool& flag) {
+void opcion1(string& fileName, ifstream& input, int& index, TelefonoMovil telefono[], bool& flag) 
+{
 
     // Temp values to facilitate Telefono creation
     string marca;
     string modelo;
     string precio;
     string inventario;
-    cout << "Por favor provea el nombre del archivo junto a su extension \'.dat\'" << endl;
+    cout << "Provea el numbre del archivo junto con su extension. \'.dat\'" << endl;
         cin >> fileName;
         input.open(fileName); // Metele Try-Catch para cuando el file no exista
-        while(getline(input, marca)){
+        while(getline(input, marca))
+		{
             getline(input, modelo);
             getline(input, precio);
             getline(input, inventario);
             telefono[index] = TelefonoMovil(marca, modelo, precio, inventario);
             index++;
         }
-    flag = true;
+    flag = true; // Explain flag
     input.close();
 }
 
@@ -77,6 +81,41 @@ int opcion3(int index, TelefonoMovil telefono[]) {
         return suma;
 }
 
+//Busca el valor del inventario en una marca en particular
+double opcion4(int& index, TelefonoMovil telefono[] )
+{
+	double precio,
+		   total;
+	int inventario;
+	string marca,
+		   modelo;
+
+	cout << "Ingrese la marca que busca";
+	cin >> marca;
+	cout << "Ingrese el modelo que busca";
+	cin >> modelo;
+
+
+	for (int i = 0; i <= index; i++) //Aqui nos vamos a mover por el arreglo 
+	{
+
+		if (marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo())) //Compara si lo que esta en ese indice es igual a lo que el usuario escribio
+		{
+			
+            inventario = telefono[i].getInventario();
+            precio = telefono[i].getPrecio(); 
+
+			total += precio * inventario; // Multiplicacion de los 2
+			cout << "El precio del inventario total de la marca - modelo" + marca + " - " + modelo +  "es: "; // Imprime un mensaje con la marca
+			return total; // devuelve el total
+		}
+		
+	}
+
+}
+
+
+
 int opcion5(int index, TelefonoMovil telefono[]) {
     // opcion5(index, telefono);
         string marcaBuscar;
@@ -96,9 +135,67 @@ int opcion5(int index, TelefonoMovil telefono[]) {
         cout << "La cantidad de " << marcaBuscar << " " << modeloBuscar << "es: " << endl;
         return suma;
 }
+//Pregunta por una marca, modelo de teléfono y cuántos se desean añadir al inventario.
+//Si la marca y modelo ya existen entonces se añade a la cantidad previa. De lo contrario, pregunta por el precio.
+//Se crea un objeto nuevo con estos valores para sus propiedadesy se añade al arreglo
+TelefonoMovil opcion6(int& index, TelefonoMovil telefono[])
+{
+	string marca,
+		   temp,
+	   	   modelo;
+	int inventario;
+	double precio;
+
+	cout << "Cual es la marca que desea anadir?";
+	cin >> marca;
+	cout << "Cual es el modelo que desea añadir?";
+	cin >> modelo;
+	cout << "Cuantos desea anadir?";
+	cin >> inventario;
+
+	for (int i = 0; i <= index; i++) // Para verficar si alguno de los elementos esta a la par con los datos ingresados
+	{
+		if (marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo()))
+		{
+			telefono[i].setInventario(telefono[i].getInventario() + inventario);
+            cout << "Se añadieron " << inventario << " al inventrario de " + marca + modelo;
+            return telefono[i];
+		}	// No utilice un Else porque si no, no verificaria el arreglo completo.
+	}
+
+    cout << "Ingrese el precio";
+	cin >> precio;
+
+    telefono[index] = TelefonoMovil(marca, modelo, precio, inventario);
+    index++;
+    cout << "Se añadieron " << inventario << " al inventrario de " + marca + modelo;
+    return telefono[index];
+	
+}
+
+//Indica los valores de las propiedades del dispositivo y resta uno a la cantidad en inventario.  
+//Si el inventario está en 0 entonces indica queno hay unidades disponible
+void opcion7(int& index, TelefonoMovil telefono[])
+{
+	
+
+	cout << "Ingrese en que lugar en el arreglo se encuentra el dispositivo que busca: " << endl;
+	cin >> index;
+	cout << telefono[index].getAttributes() << endl; //Imprime las propiedades
+
+	telefono[index].setInventario(telefono[index].getInventario() - 1);
+
+	cout << "El inventario del dispositivo que escogio es: " << telefono[index].getInventario() << endl;
+	
+}
+
+
+
+
 
 int main()
 {
+
 
     TelefonoMovil telefono[100];
     int index = 0; // Index used for telefono array
@@ -128,6 +225,7 @@ int main()
 
     case 4: // Valor de Inventario para marca-modelo particular
         // Multiplica inventorio por precio de marca-modelo
+        opcion4(index, telefono);
         break;
 
     case 5: //Mostrar cantidad disponible para marca-modelo particular
@@ -135,9 +233,11 @@ int main()
         break;
 
     case 6: // Añadir a Inventario
+        opcion6(index, telefono);
         break;
 
     case 7: // Vender telefono
+        opcion7(index, telefono);
         break;
 
     case 8:
