@@ -101,7 +101,7 @@ string TelefonoMovil::getAttributes()
 
 	string temp; // precio
   
-	temp = marca + "\n";
+	temp = marca + "\n" + modelo + "\n" + to_string(precio) + "\n"  + to_string(inventario);
 
       return temp;
 }

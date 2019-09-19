@@ -2,6 +2,7 @@
 #include <fstream>
 #include <array>
 #include <cmath>
+#include <algorithm>
 #include "TelefonoMovil.cpp"
 using namespace std;
 
@@ -67,7 +68,8 @@ void opcion1(string& fileName, ifstream& input, int& index, TelefonoMovil telefo
 void opcion2(string fileName, ofstream& output,int index,TelefonoMovil telefono[]) {
     output.open(fileName); // Wrong. Actualizar contenido en el mismo archivo
     string line;
-        for(int i = 0; i <= index; i++) {
+        for(int i = 0; i <= index - 1; i++) {
+            cout << "index" << i << endl;
             line = telefono[i].getAttributes();
             output << line << endl;
         }
@@ -77,7 +79,7 @@ void opcion2(string fileName, ofstream& output,int index,TelefonoMovil telefono[
 // Returns the value of the amount of phones in the inventory
 int opcion3(int index, TelefonoMovil telefono[]) {
     int suma = 0;
-        for(int i = 0; i <= index; i++) {
+        for(int i = 0; i <= index - 1; i++) {
             suma += telefono[i].getInventario() * telefono[i].getPrecio();
         }
         return suma;
@@ -95,7 +97,7 @@ double opcion4(int& index, TelefonoMovil telefono[] )
 	cout << "Ingrese el modelo que busca " << endl;;
 	cin >> modelo;
 
-	for (int i = 0; i <= index; i++) //Aqui nos vamos a mover por el arreglo 
+	for (int i = 0; i <= index - 1; i++) //Aqui nos vamos a mover por el arreglo 
 	{
 
 		if ( !( marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo()) ) ) //Compara si lo que esta en ese indice es igual a lo que el usuario escribio
@@ -111,26 +113,33 @@ double opcion4(int& index, TelefonoMovil telefono[] )
 
 }
 
+/*
+Pregunta por una marca y modelo y muestra la cantidad disponible en inventario
 
-
+Recibe indice como argumento, que seria la cantidad de elementos en el arreglo.
+Recibe el arrgle a utilizar.
+*/
 int opcion5(int index, TelefonoMovil telefono[]) {
-    // opcion5(index, telefono);
+
+        // Variables a usar para buscar lo necesario.
         string marcaBuscar;
         string modeloBuscar;
-        int suma = 0;
+        int cantidad = 0; // elemento a entregar. Representa cantidad en inventario.
+
+
         cout << "Por favor provee la Marca y el Modelo del telefono"
             <<  " que desea buscar. Cada entrada separada por un pulso al \'enter\'." << endl;
         cin >> marcaBuscar;
         cin >> modeloBuscar;
 
-        for(int i = 0; i <= index; i++) {
-            if(telefono[index].getMarca().compare(marcaBuscar)
-                &&  telefono[index].getModelo().compare(modeloBuscar)) {
-                    suma++;
+        for(int i = 0; i <= index - 1; i++) {
+            if( !(telefono[i].getMarca().compare(marcaBuscar)
+                &&  telefono[i].getModelo().compare(modeloBuscar)) ) { // Recorre el arreglo para buscar un objeto con la marca y modelo deseada
+                    cantidad = telefono[i].getInventario();
                 }
         }
-        cout << "La cantidad de " << marcaBuscar << " " << modeloBuscar << "es: " << endl;
-        return suma;
+        cout << "La cantidad de " << marcaBuscar << " " << modeloBuscar << " es: " << cantidad << endl; // imprime
+        return cantidad;
 }
 //Pregunta por una marca, modelo de teléfono y cuántos se desean añadir al inventario.
 //Si la marca y modelo ya existen entonces se añade a la cantidad previa. De lo contrario, pregunta por el precio.
@@ -150,9 +159,9 @@ TelefonoMovil opcion6(int& index, TelefonoMovil telefono[])
 	cout << "Cuantos desea anadir?";
 	cin >> inventario;
 
-	for (int i = 0; i <= index; i++) // Para verficar si alguno de los elementos esta a la par con los datos ingresados
+	for (int i = 0; i <= index - 1; i++) // Para verficar si alguno de los elementos esta a la par con los datos ingresados
 	{
-		if (marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo()))
+		if ( !(marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo())) ) // Recorre el arreglo para buscar un objeto con la marca y modelo deseada
 		{
 			telefono[i].setInventario(telefono[i].getInventario() + inventario);
             cout << "Se añadieron " << inventario << " al inventrario de " + marca + modelo;
@@ -160,7 +169,7 @@ TelefonoMovil opcion6(int& index, TelefonoMovil telefono[])
 		}	// No utilice un Else porque si no, no verificaria el arreglo completo.
 	}
 
-    cout << "Ingrese el precio";
+    cout << "Ingrese el precio"; // De no encontrar marca y modelo lo añade al arreglo con los nuevos argumentos
 	cin >> precio;
 
     telefono[index] = TelefonoMovil(marca, modelo, precio, inventario);
@@ -172,17 +181,38 @@ TelefonoMovil opcion6(int& index, TelefonoMovil telefono[])
 
 //Indica los valores de las propiedades del dispositivo y resta uno a la cantidad en inventario.  
 //Si el inventario está en 0 entonces indica queno hay unidades disponible
-void opcion7(int& index, TelefonoMovil telefono[])
+void opcion7(int index, TelefonoMovil telefono[])
 {
+
+    string marca;
+    string modelo;
 	
+    cout << "Por favor ingrese la marca " << endl;
+    cin >> marca;
 
-	cout << "Ingrese en que lugar en el arreglo se encuentra el dispositivo que busca: " << endl;
-	cin >> index;
-	// cout << telefono[index].getAttributes() << endl; //Imprime las propiedades
+    cout << "Por favor ingrese el modelo " << endl;
+    cin >> modelo;
 
-	telefono[index].setInventario(telefono[index].getInventario() - 1);
+    for (int i = 0; i < index - 1; i++) {
+        // Recorre el arreglo para buscar un objeto con la marca y modelo deseada.
+        // Para cambiar el attributo deseado.
+       if( !(marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo())) ) {
+           cout << "Las propiedades antes del cambio son: " << endl;
+           cout << telefono[i].getAttributes() << endl;
 
-	cout << "El inventario del dispositivo que escogio es: " << telefono[index].getInventario() << endl;
+           if(telefono[i].getInventario() <= 0) {
+               cout << "No hay unidad disponible. " << endl;
+               return;
+           }
+           else {
+               telefono[i].setInventario( telefono[i].getInventario() - 1);
+               cout << "Las propiedades despues del cambio son: " << endl;
+               cout << telefono[i].getAttributes() << endl;
+               return;
+           }
+       }
+       else return;
+    }
 	
 }
 
@@ -243,7 +273,7 @@ void opcion8(int& index, TelefonoMovil telefono[])
 
 	//imprime el arreglo de objetos de acuerdo a su ya en orden alfabetico 
 	for (int i = 0; i < index; i++) {
-		cout << telefono[i].getMarca() << " " << telefono[i].getModelo() << ": " << telefono[i].getInventario() << " \t|\t Precio: $" << telefono[i].getPrecio() << endl;
+		cout << telefono[i].getAttributes() << endl;
 	}
 
 
@@ -290,7 +320,7 @@ int main()
         break;
 
     case 5: //Mostrar cantidad disponible para marca-modelo particular
-        cout << opcion5(index, telefono) << endl;
+        opcion5(index, telefono);
         break;
 
     case 6: // Añadir a Inventario
@@ -302,6 +332,7 @@ int main()
         break;
 
     case 8:
+        opcion8(index, telefono);
         break;
     
     case 0:
