@@ -187,6 +187,69 @@ void opcion7(int& index, TelefonoMovil telefono[])
 }
 
 
+//La opcion 8 nos muestra primero en orden alfabetico de acuerdo a la marca,
+//luego de acuerdo al modelo. enviamos como argumento el largo del arreglo y 
+// y el arreglo de los telefonos y hacemos el sort con un bubble sort
+//@Ramon A Alvarez
+void opcion8(int& index, TelefonoMovil telefono[])
+{
+	//esta variable la utilizamos para guardar el objeto que vamos a mover
+	//para no perderlo
+	TelefonoMovil temp,
+		          temp2;
+	//estas variables son para poder comparar las marcas y los modelos
+	//poniendolo en lower case
+	string marcaInicial,
+		   marcaProxima,
+		   modeloInicial,
+		   modeloProximo;
+
+	//
+	for (int i = 0; i < index; i++)
+	{
+		for (int j = 0; j < index - 1- i; j++)
+		{
+			//ponenmos el string en el de la marcas que queremos comparar para poner en minusculas
+			marcaInicial = telefono[j].getMarca();
+			for_each(marcaInicial.begin(), marcaInicial.end(), [](char& c) {c = ::tolower(c);});
+			marcaProxima = telefono[j+1].getMarca();
+			for_each(marcaProxima.begin(), marcaProxima.end(), [](char& c) {c = ::tolower(c); });
+
+			//ponenmos el string en el de la modelos que queremos comparar para poner en minusculas
+            modeloInicial = telefono[j].getModelo();
+			for_each(modeloInicial.begin(), modeloInicial.end(), [](char& c) {c = ::tolower(c); });
+			modeloProximo = telefono[j + 1].getModelo();
+			for_each(modeloProximo.begin(), modeloProximo.end(), [](char& c) {c = ::tolower(c); });
+			
+			// en este condicional hacemos la comparacion y cambiamos el orden de acuerdo al alfabeto
+			if (marcaInicial.compare(marcaProxima) > 0)
+			{
+				temp = telefono[j];
+				telefono[j] = telefono[j + 1];
+				telefono[j + 1] = temp;
+			}
+			//este condicional si las marcas son iguales compara los modelos y los sortea en orden alfabetico
+			else if (marcaInicial.compare(marcaProxima) == 0)
+			{
+				if (modeloInicial.compare(modeloProximo) > 0)
+				{
+					temp = telefono[j];
+					telefono[j] = telefono[j + 1];
+					telefono[j + 1] = temp;
+				}
+			}
+		}
+	}
+
+	//imprime el arreglo de objetos de acuerdo a su ya en orden alfabetico 
+	for (int i = 0; i < index; i++) {
+		cout << telefono[i].getMarca() << " " << telefono[i].getModelo() << ": " << telefono[i].getInventario() << " \t|\t Precio: $" << telefono[i].getPrecio() << endl;
+	}
+
+
+}
+
+
 
 
 
