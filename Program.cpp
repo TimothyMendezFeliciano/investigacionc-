@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <array>
+#include <cmath>
 #include "TelefonoMovil.cpp"
 using namespace std;
 
@@ -63,11 +64,12 @@ void opcion1(string& fileName, ifstream& input, int& index, TelefonoMovil telefo
 }
 
 // Writes telefono data into same file ase read (?) with data separated by space
-void opcion2(string fileName,ofstream& output,int index,TelefonoMovil telefono[]) {
+void opcion2(string fileName, ofstream& output,int index,TelefonoMovil telefono[]) {
     output.open(fileName); // Wrong. Actualizar contenido en el mismo archivo
+    string line;
         for(int i = 0; i <= index; i++) {
-            output << telefono[i].getMarca() << " " << telefono[i].getModelo()
-            << " " << telefono[i].getPrecio() << " " << telefono[i].getInventario() << endl;
+            line = telefono[i].getAttributes();
+            output << line << endl;
         }
     output.close();
 }
@@ -84,29 +86,24 @@ int opcion3(int index, TelefonoMovil telefono[]) {
 //Busca el valor del inventario en una marca en particular
 double opcion4(int& index, TelefonoMovil telefono[] )
 {
-	double precio,
-		   total;
-	int inventario;
+	double total = 0;
 	string marca,
 		   modelo;
 
-	cout << "Ingrese la marca que busca";
+	cout << "Ingrese la marca que busca " << endl;
 	cin >> marca;
-	cout << "Ingrese el modelo que busca";
+	cout << "Ingrese el modelo que busca " << endl;;
 	cin >> modelo;
-
 
 	for (int i = 0; i <= index; i++) //Aqui nos vamos a mover por el arreglo 
 	{
 
-		if (marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo())) //Compara si lo que esta en ese indice es igual a lo que el usuario escribio
+		if ( !( marca.compare(telefono[i].getMarca()) && modelo.compare(telefono[i].getModelo()) ) ) //Compara si lo que esta en ese indice es igual a lo que el usuario escribio
 		{
-			
-            inventario = telefono[i].getInventario();
-            precio = telefono[i].getPrecio(); 
+            cout << telefono[i].getAttributes() << endl;
+            total = telefono[i].getInventario() * telefono[i].getPrecio(); 
 
-			total += precio * inventario; // Multiplicacion de los 2
-			cout << "El precio del inventario total de la marca - modelo" + marca + " - " + modelo +  "es: "; // Imprime un mensaje con la marca
+			cout << "El precio del inventario total de la marca - modelo " + marca +" " + modelo +  " es: " << total << endl; // Imprime un mensaje con la marca
 			return total; // devuelve el total
 		}
 		
@@ -181,7 +178,7 @@ void opcion7(int& index, TelefonoMovil telefono[])
 
 	cout << "Ingrese en que lugar en el arreglo se encuentra el dispositivo que busca: " << endl;
 	cin >> index;
-	cout << telefono[index].getAttributes() << endl; //Imprime las propiedades
+	// cout << telefono[index].getAttributes() << endl; //Imprime las propiedades
 
 	telefono[index].setInventario(telefono[index].getInventario() - 1);
 
@@ -205,6 +202,7 @@ int main()
     ifstream input; // File to read from
     ofstream output; // File to write to
 
+    do{
     menuSelection(option);
 
     switch (option)
@@ -246,6 +244,8 @@ int main()
     case 0:
         break;
     }
+
+    }while(!(option == 0));
 
     return 0;
 }
