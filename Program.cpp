@@ -265,7 +265,7 @@ void opcion8(int& index, TelefonoMovil telefono[])
 			for_each(marcaProxima.begin(), marcaProxima.end(), [](char& c) {c = ::tolower(c); });
 
 			//ponenmos el string en el de la modelos que queremos comparar para poner en minusculas
-            modeloInicial = telefono[j].getModelo();
+                        modeloInicial = telefono[j].getModelo();
 			for_each(modeloInicial.begin(), modeloInicial.end(), [](char& c) {c = ::tolower(c); });
 			modeloProximo = telefono[j + 1].getModelo();
 			for_each(modeloProximo.begin(), modeloProximo.end(), [](char& c) {c = ::tolower(c); });
@@ -314,12 +314,13 @@ int main()
     ifstream input; // File to read from
     ofstream output; // File to write to
 
+     // este do-while lo hacemos para que mientras el 0 no sea presionado va seguir preguntando por el una seleccion del menu	
     do{
     menuSelection(option);
 
     switch (option)
     {
-        // Preguntar al profe que hacer si el archivo no existe
+        
     case 1: // Cargar datos
         opcion1(fileName, input, index, telefono, flag);
         break;
