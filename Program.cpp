@@ -97,10 +97,14 @@ double opcion4(int& index, TelefonoMovil telefono[] )
 	string marca,
 		   modelo;
 
-	cout << "Ingrese la marca que busca " << endl;
-	cin >> marca;
-	cout << "Ingrese el modelo que busca " << endl;;
-	cin >> modelo;
+	cout << "Separado por una coma " << endl;
+	cout << "Ingrese la marca que busca ";
+	cout << "Ingrese el modelo que busca " << endl;
+
+    cout << "Ej: Sadsong,Fantasy Vote 9" << endl;
+
+	getline(cin, marca, ',' );
+	getline(cin, modelo); // Esta forma provee instrucciones al usuario, mas recoge ambos valores con el espacio
 	
 	
 	for (int i = 0; i <= index - 1; i++) 
@@ -135,10 +139,15 @@ int opcion5(int index, TelefonoMovil telefono[]) {
         int cantidad = 0; 
 
 
-        cout << "Por favor provee la Marca y el Modelo del telefono"
-            <<  " que desea buscar. Cada entrada separada por un pulso al \'enter\'." << endl;
-        cin >> marcaBuscar;
-        cin >> modeloBuscar;
+        cout << "Separado por una coma " << endl;
+	cout << "Ingrese la marca que busca ";
+	cout << "Ingrese el modelo que busca " << endl;
+
+    cout << "Ej: Sadsong,Fantasy Vote 9" << endl;
+
+	getline(cin, marcaBuscar, ',' );
+	getline(cin, modeloBuscar); // Esta forma provee instrucciones al usuario, mas recoge ambos valores con el espacio
+
 	
         for(int i = 0; i <= index - 1; i++) {
             if( !(telefono[i].getMarca().compare(marcaBuscar)
@@ -166,10 +175,15 @@ TelefonoMovil opcion6(int& index, TelefonoMovil telefono[])
 	int inventario;
 	double precio;
 
-	cout << "Cual es la marca que desea anadir?";
-	cin >> marca;
-	cout << "Cual es el modelo que desea añadir?";
-	cin >> modelo;
+	cout << "Separado por una coma " << endl;
+	cout << "Ingrese la marca que busca ";
+	cout << "Ingrese el modelo que busca " << endl;
+
+    cout << "Ej: Sadsong,Fantasy Vote 9" << endl;
+
+	getline(cin, marca, ',' );
+	getline(cin, modelo); // Esta forma provee instrucciones al usuario, mas recoge ambos valores con el espacio
+
 	cout << "Cuantos desea anadir?";
 	cin >> inventario;
 	
@@ -204,11 +218,15 @@ void opcion7(int index, TelefonoMovil telefono[])
     string marca;
     string modelo;
 	
-    cout << "Por favor ingrese la marca " << endl;
-    cin >> marca;
+    cout << "Separado por una coma " << endl;
+	cout << "Ingrese la marca que busca ";
+	cout << "Ingrese el modelo que busca " << endl;
 
-    cout << "Por favor ingrese el modelo " << endl;
-    cin >> modelo;
+    cout << "Ej: Sadsong,Fantasy Vote 9" << endl;
+
+	getline(cin, marca, ',' );
+	getline(cin, modelo); // Esta forma provee instrucciones al usuario, mas recoge ambos valores con el espacio
+
 
     for (int i = 0; i < index - 1; i++) {
         // Recorre el arreglo para buscar un objeto con la marca y modelo deseada.
@@ -230,7 +248,6 @@ void opcion7(int index, TelefonoMovil telefono[])
                return;
            }
        }
-       else return;
     }
 	
 }
